@@ -1,0 +1,141 @@
+<div class=" col-md-3 col-sm-4 col-xs-12 col-left" id="filter-sidebar"> 
+ {% if template.name == 'collection' and collection.all_tags.size > 0 %}
+  {% assign categories = '' %}
+  {% for tag in collection.all_tags %}
+    {% if tag contains '_' %}
+      {% capture categories %}{% unless categories == blank  %}{{ categories }}|{% endunless %}{{ tag | split: '_' | first }}{% endcapture %}
+    {% endif %}
+  {% endfor %}
+  {% assign cat_array = categories | split: '|' | uniq %}
+{% endif %}
+ {% if collection.all_tags.size > 0 %}
+
+    <div class="grid-uniform mobile-only-show">
+                 <div class="continue-filter">
+        <h5 class="main-tittles"> FILTER  <div class="reset-filter">  Show All    </div>
+			<span class="close-sibade"> <i class="cs-font clever-icon-close"></i>  </span>  </h5>
+     </div>
+      {% for cat_item in cat_array %}
+        <div class="sidebar-custom current grid-item medium--one-third {{ cat_item }}">
+         <div class="title">
+           <h3>
+            {{ cat_item |replace: '-',' ' }}  <i class="icofont icofont-simple-down"></i>
+           </h3>
+          </div>
+          {% assign develop = 'block' %}
+          
+           {% for tag in collection.all_tags %}
+              {% assign cat = tag | split: '_' | first %}
+              {% if cat != tag and cat_item == cat %}
+                {% if current_tags contains tag %}
+                {% assign develop = 'true' %}
+                
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          <div class="content" style="display: {% if develop == 'block' %} none;{% else %}block;{% endif %} ">
+          <ul class="advanced-filters widget-content">
+           
+            {% for tag in collection.all_tags %}
+              {% assign cat = tag | split: '_' | first %}
+              {% if cat != tag and cat_item == cat %}
+                {% comment %}
+                  Strip out tag category prefix and add/remove link for tag filtering
+                {% endcomment %}
+                {% if current_tags contains tag %}
+                  <li class="advanced-filter active-filter {{ tag | handle }}" data-group="{{ cat_item }}" data-handle="{{ tag | handle }}">{{ tag | remove_first: cat_item | remove_first: '_' | link_to_remove_tag: tag }}</li>
+                {% else %}
+                  <li class="advanced-filter {{ tag | handle }}" data-group="{{ cat_item }}" data-handle="{{ tag | handle }}">{{ tag | remove_first: cat_item | remove_first: '_' | link_to_add_tag: tag }}</li>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </ul>
+          </div>
+        </div>
+      {% endfor %}
+
+    </div>
+    <script>
+    $(function() {
+      
+      
+ after_load = function after_load(){
+  $("img[data-vimeo-id]").each(function(index) {
+    var vimeoId = $(this).data('vimeo-id');
+    // Endpoint: https://vimeo.com/api/oembed.json?url=https%3A//vimeo.com/
+    $.getJSON('https://vimeo.com/api/oembed.json?url=https%3A//vimeo.com/' + vimeoId, {
+        format: "json",
+        width: "640"
+      },
+      function(data) {
+        $("img[data-vimeo-id=" + vimeoId + "]").attr('src', data.thumbnail_url);
+      });
+  });
+ }
+  after_load();
+       $(document).on('click', '.reset-filter', function(e){
+         var get_url = window.location.origin+'/collections/{{collection.handle}}/';
+        $('.collection-page .for-bg').html('<div class="_jsLoaderDiv">    </div>');
+        $.get(get_url, function(data){
+          $content =  $(data).find('.custom-filter').html();
+          $('.custom-filter').html($content);
+          history.pushState('', '', get_url);
+          after_load();
+        });
+       });
+      $(document).on('click', '.advanced-filter', function(e){
+           e.preventDefault();
+           var base_url = window.location.origin+'/collections/{{collection.handle}}/';
+           var newIndex = $(this).attr('data-group');
+           var newValue = $(this).attr('data-handle');
+           var dataGroup = {};
+           var slug  = '';
+           $('.advanced-filter').each(function (){
+              var data_group = $(this).attr('data-group');
+              dataGroup[data_group]  = '';
+           });
+           $.each(dataGroup, function (index, value) {
+            dataGroup[index] = $('.active-filter[data-group="'+index+'"]').data('handle');
+             if((index == newIndex)){
+               dataGroup[index] = (dataGroup[index] == newValue)?'':newValue;
+             }
+             if(dataGroup[index]){
+               if(slug) slug +='+';
+               slug +=dataGroup[index];
+             }  
+           });
+        
+         var get_url = base_url+slug;
+         $('.collection-page').html('<div class="_jsLoaderDiv"></div>');
+         $.get(get_url, function(data){
+            $content =  $(data).find('.custom-filter').html();
+            $('.custom-filter').html($content);
+            history.pushState('', '', get_url);
+            //$('.sidebar-custom .content').hide();
+           $('.sidebar-custom.current').removeClass('current');
+            after_load();
+      	 });
+     });
+      
+    });
+       //$('.sidebar-custom .content').hide();   
+      $('.sidebar-custom.current').removeClass('current');
+      $(document).on('click', '.sidebar-custom h3', function(){
+       $class = $(this).parent().parent().find('.content').css('display');
+       //$('.sidebar-custom h3').parent().parent().find('.content').hide();
+       $(this).parent().parent().find('.content').css('display' , ($class == 'block')?'none':'block');   
+        if ($class == 'block')
+        {
+           
+          $(this).parent().parent().removeClass('current');
+        }
+//         else{
+//         $('.sidebar-custom.current').removeClass('current');
+//           $(this).parent().parent().addClass('current');
+//         }
+       
+      });
+    </script>
+  {% endif %}
+</div>
+
