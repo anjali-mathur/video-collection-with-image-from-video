@@ -1,0 +1,30 @@
+##isotope-recipe-library
+<div class="item-col-5 col-sm-4 col-xs-6 pro-list"> 
+<div class="grid-item product-item" data-toggle="modal" data-target="#myModal-{{ forloop.index }}-{{paginate.current_page }}" id="product-{{ product.id }}">
+<div class="product-inner {% if lable_out %} out-stock-product {% endif %}">
+      <div class="product-image">
+        <a href="{{ product.url | within: collection }}" class="grid-image" href="{{product.url}}">
+              <div class="full-height-vedio color-pasific" style="overflow:hidden;">
+      {% for tag in  product.tags %}
+      {% if tag contains 'vimeo_' %}
+      {% assign sfsd = tag %}
+      {% assign sfr = tag | split: '_' %}
+      <a href="{{product.url}}">
+        <div class="vimeo-video">
+          <img data-vimeo-id="{{ sfr[1] }}" src="" />
+            <div class="block-btn"> <span class="recip-icon" >View Recipe</span> </div>
+        </div>      
+      </a>
+      {%endif%}
+      {% endfor%}
+    </div>
+        
+        </a>
+      </div>
+      <div class="product-bot">
+       <h6><a href="{{ product.url | within: collection }}" class="product-title" href="{{product.url}}">{{ product.title | truncatewords: 4 ,'' }}</a></h6>
+      </div>
+    </div>
+  </div>
+</div>
+ 
