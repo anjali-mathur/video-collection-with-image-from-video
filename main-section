@@ -1,0 +1,576 @@
+{% assign display_image_cat = section.settings.display_image_cat %}
+{% assign image_category = section.settings.image_category %}
+{% assign collection_banner_title = section.settings.collection_banner_title %}
+{% assign collection_height_image = section.settings.collection_height_image %}
+{% assign sidebar_categories_title = section.settings.sidebar_categories_title %}
+{% assign collection_results_per_row = section.settings.collection_results_per_row %}
+{% assign collection_infinite_scrolling = section.settings.collection_infinite_scrolling %}
+{% assign collection_infinite_scrolling_text = section.settings.collection_infinite_scrolling_text %}
+{% assign collection_infinite_scrolling_no_more_product_text = section.settings.collection_infinite_scrolling_no_more_product_text %}
+
+{% if section.settings.isotope_collection_results_per_page != blank %}
+{% assign product_per_page = section.settings.isotope_collection_results_per_page %}
+{% else %}
+{% assign product_per_page = 14 %}
+{% endif %}
+
+<div class="row main_row sidebar-left {% if section.settings.enable_col_left %} {% else %} hidden-sidebar {% endif %}">
+     {% include 'recipe-page-header' %} 
+   <div class="display-toolbar">
+     <div class="container">  {% include 'toolbar-recipe' %} </div>
+  </div>
+   <div class="collection-midle">
+     <div class="container">
+<div class="row custom-filter">
+ {% include 'ajax-recipe-sidebar' %}
+ <div class="col-md-9 col-sm-12 col-xs-12 col-main  collection-page">
+  <div class="for-bg">
+     {% paginate collection.products by product_per_page %}
+    
+      <div class="product-grid-isotope-parent ">
+      <div class="products-grid product-grid-item">
+  <div id="MainContent">
+      <div class="EndlessScroll">
+<div class="row">
+        {% for product in collection.products %}
+         {% include 'isotope-recipe-library' %}
+        {% endfor %}
+        {% if paginate.next %}
+          <div class="pagination">
+            <a href="{{ paginate.next.url }}">Loading More</a>
+          </div>
+        {% endif %}
+        </div>
+      </div>
+  </div>
+
+        </div>
+    </div>
+    {% endpaginate %}
+   
+    <div class="clr"></div>
+  </div>
+ 
+  </div>
+  </div>
+  </div>
+</div>
+</div>
+
+
+
+
+        
+   <div class="recip-pop modal fade " id="myModal-deepak" role="dialog">
+     <div class="modal-dialog">
+       <div class="row">
+          <button type="button" class="close" data-dismiss="modal"><i class="cs-font clever-icon-close"></i> </button>
+         <div class="col-sm-6 left_side">
+           <div class="sp-img"></div>
+          
+           <div class = "_jsiframe">
+           </div>
+          
+           
+         </div>
+           <div class="col-sm-6 right_side">
+        	 <h2 class="sp-title" ></h2>
+             
+      		<div class="desc sp-desc"></div>
+             	
+         </div>
+       </div>
+       </div>
+  </div>
+
+ 
+
+
+ 
+<script type="text/javascript">
+  function videoSize() {
+  var $windowHeight = $(window).height();
+  var $videoHeight = $(".video").outerHeight();
+	var $scale = $windowHeight / $videoHeight;
+  
+  if ($videoHeight <= $windowHeight) {
+    $(".video").css({
+      "-webkit-transform" : "scale("+$scale+") translateY(-50%)",
+			"transform" : "scale("+$scale+") translateY(-50%)"
+		});
+	};
+}
+
+$(window).on('load resize',function(){
+  videoSize();
+});
+  
+</script> 
+
+<!-- Trigger/Open The Modal -->
+<button class="btn" style="display: none;" id="myBtn"></button>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="js-modal-content newyear  modal-content">
+    <span class="close">X</span>
+    <p>Some text in the Modal..</p>
+  </div>
+
+</div>
+
+<script>
+$(document).ready(function(){
+  $(document).on('click', '#close1' , function(){
+    $('.js-modal-content').html('');
+    $("#myModal").css("display", "none");    
+  });
+
+  $(document).on('click', '.window_content' , function(){	
+	var ifra = $(this).find('iframe').attr('src').split('?')[0];  
+    modal.style.display = "block"; 
+    $('.js-modal-content').html('<div class="responsive-video-popup"><iframe src="'+ifra+'?autoplay=1&amp;title=0&amp;byline=0&amp;color=ffffff&amp;portrait=0" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="" > </iframe> </div> <span id="close1" class="close"><i class="cs-font clever-icon-close"></i></span>');
+	$("#close1").css("display", "block");
+    if(/^(http|https|ftp):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i.test(ifra)){
+		ifra =	ifra+'?title=0&amp;byline=0&amp;portrait=0;';
+        $.cookie("surfingVideoUrl",ifra, { path: '/' });
+        $href = $(this).parents().find('.product-bot h6 a').attr('href');	
+      	$href = window.location.origin+$href;
+      	$.cookie("windowVideoPageUrl",$href, { path: '/' });
+    }     
+  });
+  
+
+//var myFrame = $(this).closest("div.navbar_top").next('div.window_content').children('iframe').attr("iframe-popup");
+  // Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal 
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+  
+});
+
+</script>
+ 
+ 
+    
+
+{% schema %}
+{
+  "name": "Collection pages",
+  "settings": [
+
+      
+      {
+        "type": "checkbox",
+        "id": "enable_col_left",
+        "label": "Show Sidebar",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "isotope_collection_results_per_page",
+        "label": "Products per page",
+        "default": "9"
+      },
+      {
+        "type": "select",
+        "id": "collection_results_per_row",
+        "label": "Products per row",
+        "options": [
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+          {
+            "value": "5",
+            "label": "5"
+          },
+          {
+            "value": "6",
+            "label": "6"
+          }
+        ]
+      },
+      {
+          "type": "select",
+          "id": "search_position",
+          "label": "Alignment",
+          "options": [
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        },
+        {
+          "value": "text-center",
+          "label": "Center"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin_search",
+      "label": "Margin",
+      "default": "0px 0px 0px 0px"
+    },
+	{
+        "type": "checkbox",
+        "id": "collection_infinite_scrolling",
+        "label": "Enable Infinite Scrolling (Show More Button)",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "collection_infinite_scrolling_text",
+        "label": "Show More Button Text",
+        "default": "Show More"
+      },
+      {
+        "type": "text",
+        "id": "collection_infinite_scrolling_no_more_product_text",
+        "label": "All products loaded",
+        "default": "All products loaded"
+      },
+	 {
+        "type": "header",
+        "content": "Categories"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_categories",
+        "label": "Enable Categories",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "sidebar_categories_title",
+        "label": "Categories Block Title",
+        "default": "Categories"
+      },
+
+    {
+        "type": "header",
+        "content": "How it Work Video"
+      },
+     {
+        "type": "text",
+        "id": "video_title",
+        "label": "Video Title",
+        "default": "How It Work"
+      },
+      {
+        "type": "text",
+        "id": "video_redirect",
+        "label": "Add link"
+      },
+      {
+        "type": "text",
+        "id": "video_url",
+        "label": "Video URL"
+      },
+      
+	
+	 {
+        "type": "header",
+        "content": "Collection baner"
+      },
+    {
+        "type": "checkbox",
+        "id": "display_image_cat",
+        "label": "Display Image Category?",
+        "default": true
+      },
+      {
+        "type": "image_picker",
+        "id": "image_category",
+        "label": "Image Category"
+      },
+      {
+        "type": "text",
+        "id": "collection_height_image",
+        "label": "Height Image Category",
+        "default": "100"
+      },
+      {
+        "type": "textarea",
+        "id": "collection_banner_title",
+        "label": "Title",
+        "default": "Title Banner"
+      }
+
+      
+  ],
+	"blocks": [
+			
+			{
+              "type": "block_filter_color",
+              "name": "Filter By Color",
+              "settings": [
+                  
+                {
+                  "type": "text",
+                  "id": "shop_by_tags_1_title",
+                  "label": "Shop by tags 1 title",
+                  "default": "Shop By Color",
+                  "info": "i.e \"Shop by Color\"."
+                },
+                {
+                  "type": "text",
+                  "id": "shop_by_color_text_1",
+                  "label": "Shop by color text 1",
+                  "default": "Beige",
+                  "info": "i.e \"Red\"."
+                },
+                {
+                  "type": "image_picker",
+                  "id": "color-1",
+                  "label": "Shop by color image 1"
+                },
+                {
+                  "type": "text",
+                  "id": "shop_by_color_text_2",
+                  "label": "Shop by color text 2",
+                  "default": "Red"
+                },
+                {
+                  "type": "image_picker",
+                  "id": "color-2",
+                  "label": "Shop by color image 2"
+                },
+                {
+                  "type": "text",
+                  "id": "shop_by_color_text_3",
+                  "label": "Shop by color text 3",
+                  "default": "White"
+                },
+                {
+                  "type": "image_picker",
+                  "id": "color-3",
+                  "label": "Shop by color image 3"
+                },
+                {
+                  "type": "text",
+                  "id": "shop_by_color_text_4",
+                  "label": "Shop by color text 4",
+                  "default": "Pink"
+                },
+                {
+                  "type": "image_picker",
+                  "id": "color-4",
+                  "label": "Shop by color image 4"
+                },
+                {
+                  "type": "text",
+                  "id": "shop_by_color_text_5",
+                  "label": "Shop by color text 5",
+                  "default": "Silver"
+                },
+                {
+                  "type": "image_picker",
+                  "id": "color-5",
+                  "label": "Shop by color image 5"
+                },
+                {
+                  "type": "text",
+                  "id": "shop_by_color_text_6",
+                  "label": "Shop by color text 6",
+                  "default": "Blue"
+                },
+                {
+                  "type": "image_picker",
+                  "id": "color-6",
+                  "label": "Shop by color image 6"
+                },
+                {
+                  "type": "text",
+                  "id": "shop_by_color_text_7",
+                  "label": "Shop by color text 7",
+                  "default": "Gray"
+                },
+                {
+                  "type": "image_picker",
+                  "id": "color-7",
+                  "label": "Shop by color image 7"
+                },
+                {
+                  "type": "text",
+                  "id": "shop_by_color_text_8",
+                  "label": "Shop by color text 8",
+                  "default": "Black"
+                },
+                {
+                  "type": "image_picker",
+                  "id": "color-8",
+                  "label": "Shop by color image 8"
+                },
+                {
+                  "type": "text",
+                  "id": "shop_by_color_text_9",
+                  "label": "Shop by color text 9",
+                  "default": "Green"
+                },
+                {
+                  "type": "image_picker",
+                  "id": "color-9",
+                  "label": "Shop by color image 9"
+                },
+                {
+                  "type": "text",
+                  "id": "shop_by_color_text_10",
+                  "label": "Shop by color text 10"
+                },
+                {
+                  "type": "image_picker",
+                  "id": "color-10",
+                  "label": "Shop by color image 10"
+                }
+
+              ]
+            },
+			{
+              "type": "block_filter_size",
+              "name": "Filter By Size",
+              "settings": [
+                  
+                {
+                  "type": "text",
+                  "id": "shop_by_tags_2_title",
+                  "label": "Shop by tags 2 title",
+                  "default": "Shop By Size",
+                  "info": "i.e \"Shop by Size\"."
+                },
+                {
+                  "type": "text",
+                  "id": "shop_by_tags_2_list_tags",
+                  "label": "Shop by tags 2 list",
+                  "default": "S, M, L, XL, 2X, 3X",
+                  "info": "Separate by a comma, i.e \"XS, S, M, L, XL\"."
+                }
+
+              ]
+            },
+            {
+              "type": "block_filter_price",
+              "name": "Filter By Price",
+              "settings": [
+                  
+                {
+                  "type": "text",
+                  "id": "shop_by_tags_3_title",
+                  "label": "Shop by tags 3 title",
+     			  "default": "Shop By Price",
+                  "info": "i.e \"Shop by Price\"."
+                },
+                {
+                  "type": "text",
+                  "id": "shop_by_tags_3_list_tags",
+                  "label": "Shop by tags 3 list",
+  				  "default": "0 - 49$, 50$ - 99$, 100$ - 149$, 150$ - 299$, 200$ - 500$",
+                  "info": "Separate by a comma, i.e \"$100 - $300, $300 - $500\"."
+                }
+
+              ]
+            },
+            {
+              "type": "block_filter_brand",
+              "name": "Filter By Brand",
+              "settings": [
+                  
+                {
+                  "type": "text",
+                  "id": "shop_by_tags_4_title",
+                  "label": "Shop by tags 4 title",
+     			  "default": "Shop By Brand",
+                  "info": "i.e \"Shop by Brand\"."
+                },
+                {
+                  "type": "text",
+                  "id": "shop_by_tags_4_list_tags",
+                  "label": "Shop by tags 4 list",
+  				  "default": "Gucci, Nike, Zalo, PoloClub, Armani",
+                  "info": "Separate by a comma, i.e \"Gucci, Nike, Zalo\"."
+                }
+
+              ]
+            },
+			{
+              "type": "block_product",
+              "name": "Product Sidebar",
+              "settings": [
+                {
+                  "type": "text",
+                  "id": "featured_products_title_1",
+                  "label": "Featured Products",
+                  "default": "Featured Products"
+                },
+                {
+                  "type": "text",
+                  "id": "featured_products_limit_1",
+                  "label": "Number of products to show at block",
+                  "default": "12"
+                },
+                {
+                  "type": "collection",
+                  "id": "featured_products_collection",
+                  "label": "Collection to products from"
+                }
+
+              ]
+            },
+            {
+              "type": "block_text",
+              "name": "Custom Block Text",
+              "settings": [
+                  
+                {
+                  "type": "text",
+                  "id": "collection_custom_title",
+                  "label": "Block Title",
+                  "default": "Title"
+                },
+                {
+                  "type": "textarea",
+                  "id": "collection_custom_content",
+                  "label": "Block Content",
+                  "default": "Content"
+                }
+
+              ]
+            }
+	]
+}
+{% endschema %}
